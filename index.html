@@ -1,0 +1,450 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix Clone</title>
+    <style>
+        :root {
+            --primary-dark: #141414;
+            --primary-red: #E50914;
+            --light-gray: #AAAAAA;
+            --off-white: #F5F5F1;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--primary-dark);
+            color: var(--off-white);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.7) 10%, rgba(0,0,0,0));
+            z-index: 1000;
+        }
+
+        .logo {
+            color: var(--primary-red);
+            font-size: 2rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--off-white);
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar input {
+            background-color: rgba(255,255,255,0.1);
+            border: 1px solid var(--light-gray);
+            color: var(--off-white);
+            padding: 8px;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .search-bar button {
+            background-color: var(--primary-red);
+            color: var(--off-white);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-bar button:hover {
+            background-color: #B20710;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-profile img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+
+        main {
+            padding-top: 80px;
+        }
+
+        .banner {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+        }
+
+        .banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .banner-content {
+            position: absolute;
+            top: 50%;
+            left: 50px;
+            transform: translateY(-50%);
+            color: var(--off-white);
+            z-index: 2;
+        }
+
+        .banner-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .banner-description {
+            font-size: 1.2rem;
+            max-width: 500px;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .banner-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .banner-buttons button {
+            background-color: var(--primary-red);
+            color: var(--off-white);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .banner-buttons button:hover {
+            background-color: #B20710;
+        }
+
+        .content-row {
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .content-row h2 {
+            color: var(--off-white);
+            margin-bottom: 15px;
+        }
+
+        .movie-carousel {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding-bottom: 10px;
+        }
+
+        .movie-card {
+            flex: 0 0 auto;
+            width: 200px;
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .movie-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .movie-card:hover {
+            transform: scale(1.1);
+            z-index: 1;
+        }
+
+        .movie-card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .movie-card:hover .movie-card-overlay {
+            opacity: 1;
+        }
+
+        .movie-card-title {
+            color: var(--off-white);
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .movie-card-buttons button {
+            background-color: var(--primary-red);
+            color: var(--off-white);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .movie-card-buttons button:hover {
+            background-color: #B20710;
+        }
+
+        footer {
+            padding: 20px;
+            text-align: center;
+            color: var(--light-gray);
+            background-color: rgba(0,0,0,0.7);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; /* Hide on smaller screens */
+            }
+
+            .search-bar {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .banner-content {
+                left: 20px;
+            }
+
+            .banner-title {
+                font-size: 2rem;
+            }
+
+            .banner-description {
+                font-size: 1rem;
+                max-width: 300px;
+            }
+
+            .movie-card {
+                width: 150px;
+                height: 225px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="#" class="logo">NETFLIX</a>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">TV Shows</a>
+            <a href="#">Movies</a>
+            <a href="#">New & Popular</a>
+            <a href="#">My List</a>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search...">
+            <button>Search</button>
+        </div>
+        <div class="user-profile">
+            <img src="https://via.placeholder.com/30" alt="User Profile" >
+        </div>
+    </header>
+
+    <main>
+        <section class="banner">
+            <img src="https://via.placeholder.com/1920x1080" alt="Banner Image" id="bannerImage">
+            <div class="banner-content">
+                <h1 class="banner-title">Movie Title</h1>
+                <p class="banner-description">
+                    This is a brief description of the movie. It can be a few sentences long and should give the user an idea of what the movie is about.
+                </p>
+                <div class="banner-buttons">
+                    <button>Play</button>
+                    <button>My List</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-row">
+            <h2>Trending Now</h2>
+            <div class="movie-carousel">
+                <div class="movie-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Movie 1">
+                    <div class="movie-card-overlay">
+                        <h3 class="movie-card-title">Movie 1</h3>
+                        <div class="movie-card-buttons">
+                            <button>Play</button>
+                            <button>Info</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Movie 2">
+                    <div class="movie-card-overlay">
+                        <h3 class="movie-card-title">Movie 2</h3>
+                        <div class="movie-card-buttons">
+                            <button>Play</button>
+                            <button>Info</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Movie 3">
+                    <div class="movie-card-overlay">
+                        <h3 class="movie-card-title">Movie 3</h3>
+                        <div class="movie-card-buttons">
+                            <button>Play</button>
+                            <button>Info</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Movie 4">
+                    <div class="movie-card-overlay">
+                        <h3 class="movie-card-title">Movie 4</h3>
+                        <div class="movie-card-buttons">
+                            <button>Play</button>
+                            <button>Info</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Movie 5">
+                    <div class="movie-card-overlay">
+                        <h3 class="movie-card-title">Movie 5</h3>
+                        <div class="movie-card-buttons">
+                            <button>Play</button>
+                            <button>Info</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-row">
+            <h2>New Releases</h2>
+            <div class="movie-carousel">
+                <div class="movie-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Movie 6">
+                    <div class="movie-card-overlay">
+                        <h3 class="movie-card-title">Movie 6</h3>
+                        <div class="movie-card-buttons">
+                            <button>Play</button>
+                            <button>Info</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Movie 7">
+                    <div class="movie-card-overlay">
+                        <h3 class="movie-card-title">Movie 7</h3>
+                        <div class="movie-card-buttons">
+                            <button>Play</button>
+                            <button>Info</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Movie 8">
+                    <div class="movie-card-overlay">
+                        <h3 class="movie-card-title">Movie 8</h3>
+                        <div class="movie-card-buttons">
+                            <button>Play</button>
+                            <button>Info</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Movie 9">
+                    <div class="movie-card-overlay">
+                        <h3 class="movie-card-title">Movie 9</h3>
+                        <div class="movie-card-buttons">
+                            <button>Play</button>
+                            <button>Info</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Movie 10">
+                    <div class="movie-card-overlay">
+                        <h3 class="movie-card-title">Movie 10</h3>
+                        <div class="movie-card-buttons">
+                            <button>Play</button>
+                            <button>Info</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Netflix Clone. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const bannerImages = [
+                "https://via.placeholder.com/1920x1080?text=Banner+1",
+                "https://via.placeholder.com/1920x1080?text=Banner+2",
+                "https://via.placeholder.com/1920x1080?text=Banner+3"
+            ];
+            let currentBannerIndex = 0;
+            const bannerImage = document.getElementById('bannerImage');
+
+            function changeBanner() {
+                currentBannerIndex = (currentBannerIndex + 1) % bannerImages.length;
+                bannerImage.src = bannerImages[currentBannerIndex];
+            }
+
+            setInterval(changeBanner, 5000); // Change banner every 5 seconds
+        });
+    </script>
+</body>
+</html>
